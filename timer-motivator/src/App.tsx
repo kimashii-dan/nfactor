@@ -11,28 +11,32 @@ function App() {
 
   useEffect(() => {
     setTime(selectedTime);
+    setIsActive(false);
   }, [selectedTime]);
 
   useEffect(() => {
-    if (!isActive) return;
-    const timer = setInterval(() => {
-      setTime((prev) => {
-        if (prev === 1) {
-          clearInterval(timer);
-          setIsActive(false);
-          return 0;
-        }
+    let timer: NodeJS.Timeout;
+    if (isActive && time > 0) {
+      setPhrase(chooseRandom());
 
-        setPhrase(chooseRandom());
+      timer = setInterval(() => {
+        setTime((prev) => prev - 1);
+      }, 1000);
+    }
 
-        return prev - 1;
-      });
-    }, 1000);
+    if (time === 0) {
+      setIsActive(false);
+    }
 
-    return () => clearInterval(timer);
-  }, [isActive]);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isActive, time]);
 
   function handleStart() {
+    if (time === 0) {
+      setTime(selectedTime);
+    }
     setIsActive(true);
   }
 
@@ -47,18 +51,18 @@ function App() {
         <h1 className="title">Timer-Motivator</h1>
 
         <p className="info">
-          {time === selectedTime ? (
+          {time === selectedTime && !isActive ? (
             <>
               Your name: <b>{name}</b>
             </>
-          ) : time !== 0 ? (
+          ) : time > 0 ? (
             <>
               {name}, you have only <b>{time}</b> seconds left. {phrase}
             </>
           ) : (
-            <>
+            <span style={{ color: "yellow" }}>
               You just won $1m dollars, <b>{name}</b>
-            </>
+            </span>
           )}
         </p>
 
