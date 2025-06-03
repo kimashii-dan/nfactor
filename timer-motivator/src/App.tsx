@@ -15,7 +15,7 @@ function App() {
   }, [selectedTime]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setInterval>;
     if (isActive && time > 0) {
       setPhrase(chooseRandom());
 
