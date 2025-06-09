@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from .database import Base
-
+from .database import Base, engine
 class Feedback(Base):
     __tablename__ = "feedback"
 
@@ -13,14 +12,4 @@ class Feedback(Base):
     created_at = Column(String, index=True, nullable=False, default="")
     updated_at = Column(String, index=True, nullable=False, default="")
 
-
-
-
-#   id: string;
-#   title: string;
-#   description: string;
-#   category: "UI" | "Performance" | "Feature";
-#   upvotes: number;
-#   downvotes: number;
-#   createdAt: Date;
-#   updatedAt: Date;
+Base.metadata.create_all(bind=engine)

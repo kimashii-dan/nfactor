@@ -3,12 +3,13 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, database
 database.Base.metadata.create_all(bind=database.engine)
-
+from .database import get_db
 app = FastAPI()
 
 origins = [
     "http://localhost:5173",
     "https://localhost:5173",
+    "https://nfactor-p2co.vercel.app"
 ]
 
 app.add_middleware(
@@ -19,12 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.post("/feedbacks/", response_model=schemas.Feedback)
 def create_feedback(item: schemas.FeedbackCreate, db: Session = Depends(get_db)):
