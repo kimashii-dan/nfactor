@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFeedbackStore } from "@/store/feedbackStore";
 import { FeedbackItem } from "./FeedbackItem";
 
 export const FeedbackList: React.FC = () => {
-  const { getFilteredAndSortedFeedbacks } = useFeedbackStore();
-  const feedbacks = getFilteredAndSortedFeedbacks();
+  const { getFilteredFeedbacks, fetchFeedbacks } = useFeedbackStore();
+
+  useEffect(() => {
+    fetchFeedbacks();
+  }, [fetchFeedbacks]);
+
+    const feedbacks = getFilteredFeedbacks();
 
   if (feedbacks.length === 0) {
     return (

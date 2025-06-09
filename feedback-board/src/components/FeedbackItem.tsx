@@ -12,8 +12,7 @@ interface FeedbackItemProps {
 
 export const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback }) => {
   const {
-    upvoteFeedback,
-    downvoteFeedback,
+    updateFeedback,
     deleteFeedback,
     setEditingFeedback,
   } = useFeedbackStore();
@@ -24,14 +23,6 @@ export const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback }) => {
       "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
     Feature:
       "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
-  };
-
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
   };
 
   const netScore = feedback.upvotes - feedback.downvotes;
@@ -51,7 +42,7 @@ export const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback }) => {
               {feedback.category}
             </Badge>
             <span className="text-sm text-muted-foreground">
-              {formatDate(feedback.createdAt)}
+              {feedback.createdAt}
             </span>
           </div>
           <div className="flex items-center gap-1">
@@ -86,7 +77,7 @@ export const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback }) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => upvoteFeedback(feedback.id)}
+              onClick={() => updateFeedback(feedback.id, {upvotes: feedback.upvotes + 1})}
               className="text-green-600 hover:text-green-700 hover:bg-green-50"
             >
               <ThumbsUp className="h-4 w-4 mr-1" />
@@ -96,7 +87,7 @@ export const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback }) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => downvoteFeedback(feedback.id)}
+              onClick={() => updateFeedback(feedback.id, {downvotes: feedback.downvotes + 1})}
               className="text-red-600 hover:text-red-700 hover:bg-red-50"
             >
               <ThumbsDown className="h-4 w-4 mr-1" />
