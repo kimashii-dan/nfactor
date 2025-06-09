@@ -1,6 +1,6 @@
 import type { Feedback } from "./types";
 
-const BASE_API = "http://localhost:8000";
+const BASE_API = import.meta.env.VITE_API_BASE_URL!
 
 // Convert backend snake_case to frontend camelCase
 function toCamel(obj: any): Feedback {
