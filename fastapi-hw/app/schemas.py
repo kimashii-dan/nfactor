@@ -27,3 +27,6 @@ class Feedback(FeedbackBase):
 
     class Config:
         orm_mode = True
+
+class GeminiResponse(BaseModel):
+    text: str

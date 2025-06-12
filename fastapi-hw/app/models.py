@@ -11,5 +11,3 @@ class Feedback(Base):
     downvotes = Column(Integer, default=0, nullable=False)
     created_at = Column(String, index=True, nullable=False, default="")
     updated_at = Column(String, index=True, nullable=False, default="")
-
-Base.metadata.create_all(bind=engine)

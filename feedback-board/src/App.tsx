@@ -5,6 +5,7 @@ import { FeedbackForm } from "./components/FeedbackForm";
 import { FilterControls } from "./components/FilterControls";
 import { FeedbackList } from "./components/FeedbackList";
 import { EditModal } from "./components/EditModal";
+import ChatWrapper from "./components/ChatWrapper";
 
 function App() {
   const theme = useFeedbackStore((state) => state.theme);
@@ -22,6 +23,7 @@ function App() {
         <FilterControls />
         <FeedbackList />
       </main>
+      <ChatWrapper />
 
       <EditModal />
     </div>

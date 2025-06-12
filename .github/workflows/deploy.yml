@@ -1,35 +1,25 @@
-name: CI/CD
+name: Deploy Application
 
 on:
   push:
     branches: [main]
-    paths:
-      - 'fastapi-hw/**'
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: fastapi-hw
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up .env file
-        run: |
-          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
-          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
-          echo "SQLALCHEMY_DATABASE_URL=${{ secrets.SQLALCHEMY_DATABASE_URL }}" >> .env
+      - name: Copy backend .env
+        run: cp ./fastapi-hw/.env ./.env.fastapi-hw
+
+      - name: Copy frontend .env
+        run: cp ./feedback-board/.env ./.env.feedback-board
 
       - name: Install Docker Compose
         run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-      - name: List files in service directory
-        run: ls -la
-
+        
       - name: Run docker-compose
         run: docker-compose up -d --build
         working-directory: fastapi-hw

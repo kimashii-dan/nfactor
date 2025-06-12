@@ -52,4 +52,14 @@ async function deleteFeedback(id: number) {
   return { ok: true };
 }
 
-export default { getFeedbacks, getFeedback, createFeedback, updateFeedback, deleteFeedback };
+async function generateResponse(feedback: Feedback){
+  const res = await fetch(`${BASE_API}/generate/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(feedback),
+  });
+  if (!res.ok) throw new Error('Response generation failed');
+  return await res.json();
+}
+
+export default { generateResponse, getFeedbacks, getFeedback, createFeedback, updateFeedback, deleteFeedback };

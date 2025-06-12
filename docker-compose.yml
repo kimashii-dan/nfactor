@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./fastapi-hw
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./fastapi-hw/.env
+    depends_on:
+      - db
+      - redis
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  celery:
+    build: ./fastapi-hw
+    env_file:
+      - ./fastapi-hw/.env
+    depends_on:
+      - backend
+      - redis
+    command: celery -A app.celery_worker.celery_app worker --loglevel=info
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:14
+    restart: always
+    env_file:
+      - ./fastapi-hw/.env  
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  frontend:
+    build: ./feedback-board
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./feedback-board/.env
+    volumes:
+      - ./feedback-board:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  postgres_data:

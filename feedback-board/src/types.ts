@@ -10,4 +10,13 @@ export interface Feedback {
 }
 
 export type FilterCategory = "all" | "UI" | "Performance" | "Feature";
-export type Theme = "light" | "dark";
+export type Theme = "system" | "light" | "dark";
+
+export type GeminiResponse = {
+  text: string
+};
+
+export type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+};

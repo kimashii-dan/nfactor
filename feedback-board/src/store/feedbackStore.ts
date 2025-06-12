@@ -12,8 +12,6 @@ interface FeedbackState {
   addFeedback: (feedback: Omit<Feedback, "id" | "createdAt" | "updatedAt">) => Promise<void>;
   updateFeedback: (id: number, updates: Partial<Feedback>) => Promise<void>;
   deleteFeedback: (id: number) => Promise<void>;
-  // upvoteFeedback: (id: number) => Promise<void>;
-  // downvoteFeedback: (id: number) => Promise<void>;
   setFilter: (filter: FilterCategory) => void;
   setTheme: (theme: Theme) => void;
   setEditingFeedback: (feedback: Feedback | null) => void;
@@ -50,19 +48,6 @@ export const useFeedbackStore = create<FeedbackState>((set, get) => ({
     }));
   },
 
-  // upvoteFeedback: async (id) => {
-  //   const feedback = await api.updateFeedback(id, {})
-  //   if (feedback) {
-  //     await get().updateFeedback(id, { upvotes: feedback.upvotes + 1 });
-  //   }
-  // },
-
-  // downvoteFeedback: async (id) => {
-  //   const feedback = get().feedbacks.find((f) => f.id === id);
-  //   if (feedback) {
-  //     await get().updateFeedback(id, { downvotes: feedback.downvotes + 1 });
-  //   }
-  // },
 
   setFilter: (filter) => set({ filter }),
   setTheme: (theme) => set({ theme }),

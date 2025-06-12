@@ -4,11 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import models, schemas, database
 database.Base.metadata.create_all(bind=database.engine)
 from .database import get_db
+from .gemini import generate
+from .tasks import notify_admin_task
 app = FastAPI()
 
 origins = [
     "http://localhost:5173",
-    "https://localhost:5173",
+    "http//frontend:5173",
     "https://nfactor-p2co.vercel.app"
 ]
 
@@ -27,6 +29,9 @@ def create_feedback(item: schemas.FeedbackCreate, db: Session = Depends(get_db))
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
+
+    notify_admin_task.delay(db_item.title, db_item.description) # type: ignore
+
     return db_item
 
 @app.get("/feedbacks/", response_model=list[schemas.Feedback])
@@ -62,3 +67,17 @@ def delete_feedback(feedback_id: int, db: Session = Depends(get_db)):
     db.delete(db_item)
     db.commit()
     return {"ok": True}
+
+
+@app.post("/generate/", response_model=schemas.GeminiResponse)
+async def generate_response(request: schemas.FeedbackBase):
+    try:
+        response = generate(request)
+        return response
+    
+
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=f"Value error: {str(ve)}")
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
