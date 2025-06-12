@@ -7,7 +7,6 @@ from app.schemas import GeminiResponse, FeedbackBase
 
 load_dotenv()
 
-
 def generate(feedback: FeedbackBase) -> GeminiResponse:
     client = genai.Client(
         api_key=os.getenv("GOOGLE_API_KEY"),

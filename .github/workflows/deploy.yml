@@ -1,21 +1,21 @@
-name: Deploy Application
+name: Build
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Copy backend .env
-        run: cp ./fastapi-hw/.env ./.env.fastapi-hw
+      - name: Create backend .env file
+        run: echo "${{ secrets.BACKEND_ENV }}" > fastapi-hw/.env
 
-      - name: Copy frontend .env
-        run: cp ./feedback-board/.env ./.env.feedback-board
+      - name: Create frontend .env file
+        run: echo "${{ secrets.FRONTEND_ENV }}" > feedback-board/.env
 
       - name: Install Docker Compose
         run: sudo apt-get update && sudo apt-get install -y docker-compose
